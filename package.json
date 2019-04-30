@@ -1,0 +1,17 @@
+{
+  "name": "new-africa-heatmap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "chroma-js": "^2.0.3",
+    "datamaps": "^0.5.9",
+    "live-server": "^1.2.1"
+  }
+}
