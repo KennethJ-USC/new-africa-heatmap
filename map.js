@@ -4,9 +4,9 @@ var colors = d3.scale.category10();
 // var currentMap = "#zoom_map";
 var div01 = document.querySelector("#zoom_map");
 var div02 = document.querySelector("#zoom_map02");
-heatmap_colors = ["f5f5f5", "red"];
+heatmap_colors = ["white", "#34005b"];
 
-f = chroma.scale(["blue", "darkred"]).domain([0,5000000]);
+f = chroma.scale(["white", "#34005b"]).domain([0,5000000]);
 
 
 series =  [
@@ -82,7 +82,7 @@ async function fetchJSON(urlparam) {
 
 var zoom;
 
-var queryYear = 2010;
+var queryYear = 2019;
 var dataSeries = [];
 var colorF = function(){};
 
@@ -91,59 +91,11 @@ var usaidPromise = fetchJSON(usaid_url);
 usaidPromise.then(
     function (result) {
         usaid = result;
-        // TODO: initialize map data values here because reasons
-        for (var i=0; i<usaid.length; i++) {
-            if (usaid[i].fiscal_year == queryYear) {
-                element = [usaid[i].country_code, usaid[i].current_amount];
-                dataSeries.push(element);
-            }
-        }  // end for
-        
-        var minValue = 0;
-        var maxValue = getMax(dataSeries);
-        console.log(maxValue);
-        colorF = chroma.scale(heatmap_colors).domain([0, maxValue]);
-        dataset = fillDataset(dataSeries, colorF);
-        //console.log(dataset);
-        
-
-        zoom = new Datamap({
-                element: document.getElementById("zoom_map"),
-                scope: 'world',
-                // Zoom in on Africa
-                
-                setProjection: function(element) {
-                  var projection = d3.geo.equirectangular()
-                    .center([23, -3])
-                    .rotate([4.4, 0])
-                    .scale(400)
-                    .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
-                  var path = d3.geo.path()
-                    .projection(projection);
-                    
-              
-                  return {path: path, projection: projection};
-                },
-                fills: {
-                  defaultFill: "slategray",
-                },
-                data: dataset,
-                
-                geographyConfig: {
-                    popupTemplate: function(geo, data) {
-                        return ['<div class="hoverinfo"><strong>',
-                                geo.properties.name,
-                                ': $' + formatNumber(data.thedata),
-                                '</strong></div>'].join('');
-                    }
-                 
-                }
-              });
-            
+        newMap(usaid, 2010);       
     }
 );
 
-newMap = function (dataparam, year) {
+var newMap = function (dataparam, year) {
     
     // if (currentMap === "#zoom_map") {
     //     currentMap = "#zoom_map02";
@@ -151,18 +103,24 @@ newMap = function (dataparam, year) {
     // else {
     //     currentMap = "#zoom_map";
     // }
+    console.log("----------")
     dataSeries = [];
+    var maxValue = 0;
     for (var i=0; i<dataparam.length; i++) {
         if (dataparam[i].fiscal_year == year) {
+            if (dataparam[i].current_amount > maxValue){
+                console.log("Found new max! ", dataparam[i].country_name, " ", dataparam[i].current_amount );
+                maxValue = dataparam[i].current_amount;
+            }
             element = [dataparam[i].country_code, dataparam[i].current_amount];
             dataSeries.push(element);
         }
     }  // end for
 
+    console.log(dataSeries);
     var minValue = 0;
-    var maxValue = getMax(dataSeries);
-    console.log(maxValue);
-    colorF = chroma.scale(heatmap_colors).domain([0, maxValue]);
+    console.log("max value:", maxValue);
+    var colorF = chroma.scale(heatmap_colors).domain([0, maxValue]);
     dataset02 = fillDataset(dataSeries, colorF);
     //console.log(dataset);
 
@@ -180,7 +138,7 @@ newMap = function (dataparam, year) {
                 .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
               var path = d3.geo.path()
                 .projection(projection);
-                console.log(path);
+                //console.log(path);
           
               return {path: path, projection: projection};
             },
@@ -190,24 +148,31 @@ newMap = function (dataparam, year) {
             data: dataset02,
             
             geographyConfig: {
+                borderColor: "#383838",
                 popupTemplate: function(geo, data) {
                     return ['<div class="hoverinfo"><strong>',
                             geo.properties.name,
-                            ': ' + formatNumber(data.thedata),
+                            ': $' + formatNumber(data.thedata),
                             '</strong></div>'].join('');
                 }
              
             }
     });
- 
-    replaceMap();
+
+    xel = document.querySelector("#zoom_map");
+    //console.log(xel.childNodes);
+    if (document.querySelector("#zoom_map").childNodes.length > 3) {
+        //console.log("made it here");
+        replaceMap();
+    }
 }
 
 function replaceMap() {
     el = document.querySelector("#zoom_map");
-    console.log(el.childNodes);
-    el.removeChild(el.childNodes[4]);
-    el.removeChild(el.childNodes[3]);
+    //console.log(el.childNodes);
+    //console.log(el.childNodes.length);
+    el.removeChild(el.childNodes[2]);
+    el.removeChild(el.childNodes[1]);
 }
 
 function getMax(arr) {
@@ -233,3 +198,9 @@ function formatNumber(num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
   }
 //console.log(usaid);
+
+
+// INPUT HANDLERS
+function yearForm(year) {
+    newMap(usaid, year);
+}

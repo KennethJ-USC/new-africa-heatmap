@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "browserify": "^16.2.3",
+    "choices.js": "^7.0.0",
     "chroma-js": "^2.0.3",
     "datamaps": "^0.5.9",
     "live-server": "^1.2.1"
