@@ -91,7 +91,10 @@ var usaidPromise = fetchJSON(usaid_url);
 usaidPromise.then(
     function (result) {
         usaid = result;
-        newMap(usaid, 2010);       
+        
+        // called twice to get rid of initial content jittering
+        newMap(usaid, 2019);
+        newMap(usaid, 2019);  
     }
 );
 
@@ -164,6 +167,7 @@ var newMap = function (dataparam, year) {
     if (document.querySelector("#zoom_map").childNodes.length > 3) {
         //console.log("made it here");
         replaceMap();
+        
     }
 }
 
@@ -173,25 +177,6 @@ function replaceMap() {
     //console.log(el.childNodes.length);
     el.removeChild(el.childNodes[2]);
     el.removeChild(el.childNodes[1]);
-}
-
-function getMax(arr) {
-    max = -1; 
-    for (var i=0; i<arr.length; i++) {
-        if (arr[i][1] > max) {
-            max = arr[i][1];
-        }
-    }
-    return max;
-}
-function getMin(arr) {
-    min = Number.MAX_SAFE_INTEGER; 
-    for (var i=0; i<arr.length; i++) {
-        if (arr[i][1] < min) {
-            min = arr[i][1];
-        }
-    }
-    return min;
 }
 
 function formatNumber(num) {
