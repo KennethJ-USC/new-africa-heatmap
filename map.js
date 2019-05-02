@@ -137,7 +137,7 @@ var newMap = function (dataparam, year) {
               var projection = d3.geo.equirectangular()
                 .center([23, -3])
                 .rotate([4.4, 0])
-                .scale(400)
+                .scale(440)
                 .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
               var path = d3.geo.path()
                 .projection(projection);
