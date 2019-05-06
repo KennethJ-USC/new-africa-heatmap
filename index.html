@@ -19,21 +19,22 @@
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 </head>
 
-<body>
-    <h3 id="header">Africa Heatmap</h3>
+<body onresize="">
+    <h3 id="header">Africa Foreign Aid Heatmap - US vs. China</h3>
+    <p class="byline"><i>A Kenneth Johnson Project</i></p>
     <hr>
     <div class="map-and-input">
             <div class="button-div"></div>
                 <div class="country-input">
                     <form class="country-button">
-                        <select onchange="setCountry(this.value);">
+                        <select id="countryform" onchange="setCountry(this.value);">
                             <option value="usaid" selected="selected">United States</option>
                             <option value="chinaaid">China</option>
                         </select>
                     </form>
                 </div>
             <form>
-                <select onchange="yearForm(this.value);">
+                <select id="yearform" onchange="yearForm(this.value);">
                     <option value="2019" selected="selected">2019</option>
                     <option value="2018">2018</option>
                     <option value="2017">2017</option>
@@ -56,12 +57,35 @@
                 </select>
             </form>
             <p class="china-note"><i>Note: China data only available for 2000-2012.</i></p>
+        
+        <div class="map-and-directions">
+            <div class="zoom_map" id="zoom_map" style="position: relative; width: 70%; height: 700px;">
+                <!-- <script>callTwice(2019)</script> -->
+            </div>
+            <div class="mytext">
+                <h4>Directions</h4>
+                <p>
+                    Very simple: there are two input fields. The top input field selects the country (US or China), and the bottom input field selects the year. The map will auto-update after either of these values are changed. 
 
-        <div class="zoom_map" id="zoom_map" style="position: relative; width: 70%; height: 700px;">
-            <!-- <script>callTwice(2019)</script> -->
+Mouse over the map for the actual value ($USD) in aid given to a specific country that year.
+                </p>
+                <h4>Observations</h4>
+                <p>Data acquisition was significantly more difficult than expected. Even in the case of the US, where the government is very transparent about foreign aid, it can be difficult to distinguish between "money promised" vs. "money distributed", failure to do this properly would lead to some foreign aid being counted twice. 
+                    <br>
+                    In the case of China, the data situation was MUCH more murky. The most reliable aid date we have for China comes from AIDDATA, a research lab at William and Mary. While their data is good, it only goes as recent as 2012. 
+                    <br>
+                    AIDDATA also distinguishes (and tries to quanitify) unofficial Chinese foreign aid. However, I only used China's "official" foreign aid for this project. 
+                    <br>
+                    I was surprised to see how much higher the numbers were for China. However, much of that discrepancy lies in the fact that much of China's foreign aid is in the form of loans (often interest free or an extremely long time horizon) where as the US often distributes aid concessionally and does not expect repayment. The value given in the map is just the total money paid out that year, and does not recognize a difference between gifts and loans. </p>
+            </div>  
         </div>
     </div>
 
+    </div>
+    <div class="citations">
+        <h4>Citations</h4>
+        <p>Strange, Austin M., Axel Dreher, Andreas Fuchs, Bradley Parks, and Michael J. Tierney. 2017. Tracking Underreported Financial Flows: China’s Development Finance and the Aid–Conflict Nexus Revisited. Journal of Conflict Resolution 61 (5): 935-963.</p>
+        <p> U.S. Agency for International Development (USAID). Foreign Aid Explorer: The official record of U.S. foreign aid.</p>
     </div>
 
 </body>

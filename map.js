@@ -1,5 +1,31 @@
 
 
+var resizeTimeout;
+window.addEventListener('resize', function(event) {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(function(){
+      console.log(document.getElementById("countryform").selectedIndex);
+    var oldcountry = getOption("countryform");
+    var oldyear = getOption("yearform");
+    window.location.reload();
+    // reset map with same parameters:
+    
+    // console.log(oldcountry, oldyear);
+
+    // document.getElementById("countryform").selectedIndex = oldcountry;
+    // document.getElementById("yearform").selectedIndex = oldyear;
+    
+
+  }, 500);
+});
+
+function getOption(objid) {
+    var obj = document.getElementById(objid);
+    var retval = obj.options[obj.selectedIndex].text;
+
+    console.log(retval);
+}
+
 var colors = d3.scale.category10();
 // var currentMap = "#zoom_map";
 var div01 = document.querySelector("#zoom_map");

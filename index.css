@@ -1,6 +1,19 @@
 
 html {
     background-color: #f1f1f1;
+    width: 100%;
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+body {
+    width: 100%;
+}
+
+.byline {
+    margin: 0px;
+    padding-top: 0px;
+    text-align: center;
 }
 
 h3 {
@@ -13,10 +26,13 @@ h3 {
     
     background-color: #cbeaf5;
     border: 1px solid black;
+
+    
+
 }
 
 .map-and-input {
-    margin: 8px 24px 16px;
+    margin: 0px 24px 16px;
 }
 
 .country-input {
@@ -26,3 +42,34 @@ h3 {
 .country-button {
     padding-right: 10px;
 }
+
+.map-and-directions {
+    display: flex;
+}
+
+.mytext {
+    padding-left: 16px;
+    flex: 1 400px;
+}
+
+.mytext h4 {
+    padding: 0px;
+    margin: 0px;
+    margin-top: 8px;
+}
+
+.mytext p {
+    margin-top: 2px;
+}
+.mytext br {
+    display: block;
+    margin: 6px 0;
+ }
+
+.citations {
+    margin: 0px 16px 8px;
+}
+.citations p {
+    color: #3f3f3f;
+}
+
