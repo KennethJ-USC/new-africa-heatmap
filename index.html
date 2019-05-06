@@ -24,7 +24,15 @@
     <hr>
     <div class="map-and-input">
             <div class="button-div"></div>
-            <form> 
+                <div class="country-input">
+                    <form class="country-button">
+                        <select onchange="setCountry(this.value);">
+                            <option value="usaid" selected="selected">United States</option>
+                            <option value="chinaaid">China</option>
+                        </select>
+                    </form>
+                </div>
+            <form>
                 <select onchange="yearForm(this.value);">
                     <option value="2019" selected="selected">2019</option>
                     <option value="2018">2018</option>
@@ -47,6 +55,8 @@
                     <option value="2001">2001</option>
                 </select>
             </form>
+            <p class="china-note"><i>Note: China data only available for 2000-2012.</i></p>
+
         <div class="zoom_map" id="zoom_map" style="position: relative; width: 70%; height: 700px;">
             <!-- <script>callTwice(2019)</script> -->
         </div>

@@ -18,3 +18,11 @@ h3 {
 .map-and-input {
     margin: 8px 24px 16px;
 }
+
+.country-input {
+    display: flex;
+}
+
+.country-button {
+    padding-right: 10px;
+}

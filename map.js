@@ -4,7 +4,14 @@ var colors = d3.scale.category10();
 // var currentMap = "#zoom_map";
 var div01 = document.querySelector("#zoom_map");
 var div02 = document.querySelector("#zoom_map02");
-heatmap_colors = ["white", "#34005b"];
+us_heatmap_colors = ["white", "#34005b"];
+china_heatmap_colors = ["white", "darkred"];
+
+var setdata = "usaid";
+var setcol = us_heatmap_colors;
+var setyear = 2019;
+
+// heatmap_colors = ["yellow, blue", "red", "green"];
 
 f = chroma.scale(["white", "#34005b"]).domain([0,5000000]);
 
@@ -60,19 +67,8 @@ function fillDataset(seriesArr, colorFunc) {
     return funcDataset;
 }
 
-  
-  function updateMap(func_series, color_param_func) {
-    outobj = {};
-    for (var i=0; i < func_series.length; i++)
-    {   
-        hexstr = chroma(color_param_func(func_series[i][1])).hex();
-        outobj[func_series[i][0]] = hexstr;
-    }
-    //console.log(outobj);
-    zoom.updateChoropleth(outobj);
-}
-
 let usaid_url = 'https://storage.googleapis.com/africa-data/usaid-disbursements.json';
+let chinaaid_url = 'https://storage.googleapis.com/africa-data/chinaaid.json'
 
 async function fetchJSON(urlparam) {
     const response = await fetch(urlparam);
@@ -87,18 +83,27 @@ var dataSeries = [];
 var colorF = function(){};
 
 var usaid = {};
+var chinaaid = {};
+
 var usaidPromise = fetchJSON(usaid_url);
+var chinaaidPromise = fetchJSON(chinaaid_url);
 usaidPromise.then(
     function (result) {
+
+        chinaaidPromise.then(
+            function (result2) {
+                chinaaid = result2;
+            }
+        );
         usaid = result;
         
         // called twice to get rid of initial content jittering
-        newMap(usaid, 2019);
-        newMap(usaid, 2019);  
+        newMap(usaid, us_heatmap_colors, 2019);
+        newMap(usaid, us_heatmap_colors, 2019);  
     }
 );
 
-var newMap = function (dataparam, year) {
+var newMap = function (dataparam, colors, year) {
     
     // if (currentMap === "#zoom_map") {
     //     currentMap = "#zoom_map02";
@@ -110,7 +115,7 @@ var newMap = function (dataparam, year) {
     dataSeries = [];
     var maxValue = 0;
     for (var i=0; i<dataparam.length; i++) {
-        if (dataparam[i].fiscal_year == year) {
+        if (dataparam[i].year == year) {
             if (dataparam[i].current_amount > maxValue){
                 console.log("Found new max! ", dataparam[i].country_name, " ", dataparam[i].current_amount );
                 maxValue = dataparam[i].current_amount;
@@ -123,7 +128,7 @@ var newMap = function (dataparam, year) {
     console.log(dataSeries);
     var minValue = 0;
     console.log("max value:", maxValue);
-    var colorF = chroma.scale(heatmap_colors).domain([0, maxValue]);
+    var colorF = chroma.scale(colors).domain([0, maxValue]);
     dataset02 = fillDataset(dataSeries, colorF);
     //console.log(dataset);
 
@@ -187,5 +192,34 @@ function formatNumber(num) {
 
 // INPUT HANDLERS
 function yearForm(year) {
-    newMap(usaid, year);
+
+    if (setdata==="usaid") {
+        console.log('in usaid if');
+        setyear = year;
+        setcol = us_heatmap_colors;
+        newMap(usaid, setcol, setyear);
+    }
+    else {
+        setyear = year;
+        setcol = china_heatmap_colors;
+        newMap(chinaaid, setcol, setyear);
+    }
+
+
+    console.log("setdata:", setdata, "; colors:", setcol, "; year:", year);
+    
+}
+
+function setCountry(country) {
+    console.log("country:", country);
+    setdata = country;
+    if (country==="usaid") {
+        setcol = us_heatmap_colors;
+        newMap(usaid, setcol, setyear);
+    }
+    else {
+        setcol = china_heatmap_colors;
+        newMap(chinaaid, setcol, setyear)
+    }
+    
 }
